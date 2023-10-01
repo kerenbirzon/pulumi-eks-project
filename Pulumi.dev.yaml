@@ -1,2 +1,4 @@
 config:
+  aws-pulumi-project:slack-token:
+    secure: AAABAJJeY+eSptgXUbcLKej4f43rniTnx0r0imBaeCluKWGE85lGOMjB2wqEj8FOfzeeSwnNjVSNGFggHpw0fuSjOESyXrBfxoaJHWpJ0lEPglOvgs3NghZpJh49j7DmaErE2S8zGJsdwzJS
   aws:region: us-east-1
