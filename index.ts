@@ -5,13 +5,13 @@ import { createSecret, createEKSCluster} from "./kubernetes/eks"
 import { installArgoCD } from "./kubernetes/argocd"
 
 // VPC Configuration
-let config = new pulumi.Config();
-let vpcname = config.require("vpc-name");
-let vpcazcount = config.require("vpc-az-count");
-let subnets = config.requireObject<any[]>("vpc-subnets");
+let vpcConfig = new pulumi.Config("aws-vpc");
+let vpcname = vpcConfig.require("vpc-name");
+let vpcazcount = vpcConfig.require("vpc-az-count");
+let subnets = vpcConfig.requireObject<any[]>("vpc-subnets");
 
 // Create VPC
-const vpcConfig = createVPC(vpcname, parseInt(vpcazcount), subnets);
+const vpc = createVPC(vpcname, parseInt(vpcazcount), subnets);
 
 
 // EKS Configuration
@@ -25,9 +25,9 @@ let maxSize = eksConfig.require("maxSize");
 // Create EKS Cluster
 const eksClusterConfig = createEKSCluster(
     clusterName,
-    vpcConfig.vpcId,
-    vpcConfig.privateSubnetIds,
-    vpcConfig.publicSubnetIds,
+    vpc.vpcId,
+    vpc.privateSubnetIds,
+    vpc.publicSubnetIds,
     instanceType,
     parseInt(desiredCapacity),
     parseInt(minSize),
@@ -47,6 +47,7 @@ let argocdRepo = argocdConfig.require("repo");
 installArgoCD(argocdNamespace, argocdChart, argocdRepo, eksProvider);
 
 // Create kubernetes secret for event exporter
+let config = new pulumi.Config();
 let slacktoken = config.requireSecret("slack-token")
 slacktoken.apply(secretValue => {
     const slackTokenSecret = createSecret("slack-token","monitoring", secretValue);

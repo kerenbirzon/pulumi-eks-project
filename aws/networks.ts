@@ -1,7 +1,4 @@
-import * as pulumi from "@pulumi/pulumi";
 import * as awsx from "@pulumi/awsx";
-
-let awsConfig = new pulumi.Config("aws");
 
 export function createVPC(
   vpcname: string, 

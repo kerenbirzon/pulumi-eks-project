@@ -32,11 +32,11 @@ export function createEKSCluster(
 }
 
 export function createNameSpace(namespace: string, eksProvider: pulumi.ProviderResource) {
-    const argocdnamespace = new kubernetes.core.v1.Namespace(`${namespace}-namespace`, {
+    const kubernetesNamespace = new kubernetes.core.v1.Namespace(`${namespace}-namespace`, {
         metadata: { name: namespace },
     }, { provider: eksProvider });
     return {
-        argocdnamespace
+        kubernetesNamespace
     } 
 }
 

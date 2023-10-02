@@ -14,7 +14,7 @@ export function installArgoCD(
     
     const argocd = new kubernetes.helm.v3.Release(`${namespace}-release`, {
         chart: chart,
-        namespace: argocdnamespace.argocdnamespace.metadata.name,
+        namespace: argocdnamespace.kubernetesNamespace.metadata.name,
         repositoryOpts: {
             repo: repo,
         },
