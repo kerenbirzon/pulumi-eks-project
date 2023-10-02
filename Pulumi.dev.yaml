@@ -1,27 +1,21 @@
 config:
-  aws-vpc:vpc-name: project_vpc
-  aws-vpc:vpc-az-count: "2"
-  aws-vpc:vpc-subnets:
-    - type: awsx.ec2.SubnetType.Public
-      cidrmask: 20
-      name: project_public_subnet
-    - type: awsx.ec2.SubnetType.Private
-      cidrmask: 20
-      name: project_private_subnet
-      
-  aws:region: us-east-1
-  
-  eks-cluster:clusterName: eks-cluster
-  eks-cluster:desiredCapacity: 2
-  eks-cluster:instanceType: t2.medium
-  eks-cluster:maxSize: 2
-  eks-cluster:minSize: 1
-
-  argo-cd:namespace: argocd
   argo-cd:chart: argo-cd
+  argo-cd:namespace: argocd
   argo-cd:repo: https://argoproj.github.io/argo-helm
-
   aws-pulumi-project:slack-token:
-    secure: AAABAJJeY+eSptgXUbcLKej4f43rniTnx0r0imBaeCluKWGE85lGOMjB2wqEj8FOfzeeSwnNjVSNGFggHpw0fuSjOESyXrBfxoaJHWpJ0lEPglOvgs3NghZpJh49j7DmaErE2S8zGJsdwzJS
-
-
+    secure: AAABAAtIeoSqJ5bvy4CNcV5rKcphITuV5UNrLwWr7ZUz47HZkJbVvhbq5rjJ4lgmekTstDODo30IsbCNck1j6T9D3xk/PQkXmSrGxMSeRP68eqYRo71PmdYklSHpuX4gij+/zpo+h4CoLrny
+  aws-vpc:vpc-az-count: "2"
+  aws-vpc:vpc-name: project_vpc
+  aws-vpc:vpc-subnets:
+    - cidrmask: 20
+      name: project_public_subnet
+      type: awsx.ec2.SubnetType.Public
+    - cidrmask: 20
+      name: project_private_subnet
+      type: awsx.ec2.SubnetType.Private
+  aws:region: us-east-1
+  eks-cluster:clusterName: eks-cluster
+  eks-cluster:desiredCapacity: "2"
+  eks-cluster:instanceType: t2.medium
+  eks-cluster:maxSize: "2"
+  eks-cluster:minSize: "1"
