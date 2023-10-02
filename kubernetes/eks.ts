@@ -1,18 +1,28 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as eks from "@pulumi/eks";
 import * as kubernetes from "@pulumi/kubernetes";
-import { vpcId, privateSubnetIds, publicSubnetIds } from '..'
 
 // Create an EKS cluster 
-export function createEKSCluster() {
-    const cluster = new eks.Cluster("eks-cluster", {
+export function createEKSCluster(
+    clusterName: string,
+    vpcId: pulumi.Output<string>, 
+    publicSubnetIds: pulumi.Output<string[]>, 
+    privateSubnetIds: pulumi.Output<string[]>,
+    instanceType: string,
+    desiredCapacity:number,
+    minSize: number,
+    maxSize: number,
+    ) {
+
+    const cluster = new eks.Cluster(clusterName, {
+        //name: clusterName,
         vpcId: vpcId,
         publicSubnetIds: publicSubnetIds,
         privateSubnetIds: privateSubnetIds,
-        instanceType: "t2.medium",
-        desiredCapacity: 2,
-        minSize: 1,
-        maxSize: 2,
+        instanceType: instanceType,
+        desiredCapacity: desiredCapacity,
+        minSize: minSize,
+        maxSize: maxSize,
     });
     
     return {
@@ -21,12 +31,15 @@ export function createEKSCluster() {
     };
 }
 
+export function createNameSpace(namespace: string, eksProvider: pulumi.ProviderResource) {
+    const argocdnamespace = new kubernetes.core.v1.Namespace(`${namespace}-namespace`, {
+        metadata: { name: namespace },
+    }, { provider: eksProvider });
+    return {
+        argocdnamespace
+    } 
+}
 
-
-// // Export the cluster's kubeconfig.
-// export const kubeconfig = cluster.kubeconfig;
-
-// export const eksProvider = new kubernetes.Provider("eks-provider", {kubeconfig: cluster.kubeconfigJson});
 
 export function createSlackTokenSecret(slacktoken: string) {
     const slackTokenSecret = new kubernetes.core.v1.Secret("slacktoken", {

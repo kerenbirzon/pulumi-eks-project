@@ -1,23 +1,24 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as kubernetes from "@pulumi/kubernetes";
-import { eksProvider } from '..'
+import { createNameSpace } from './eks'
 
 
-// Create ArgoCD ns
-export function createArgoCD() {
-    const argocdns = new kubernetes.core.v1.Namespace("argocd-ns", {
-        metadata: { name: "argocd" },
-    }, { provider: eksProvider });
+
+export function installArgoCD(
+    namespace: string, 
+    chart: string, 
+    repo: string, 
+    eksProvider: pulumi.ProviderResource) {
+
+    const argocdnamespace = createNameSpace(namespace, eksProvider);
     
-    
-    const argocd = new kubernetes.helm.v3.Release("argocd", {
-        chart: "argo-cd",
-        namespace: argocdns.metadata.name,
+    const argocd = new kubernetes.helm.v3.Release(`${namespace}-release`, {
+        chart: chart,
+        namespace: argocdnamespace.argocdnamespace.metadata.name,
         repositoryOpts: {
-            repo: "https://argoproj.github.io/argo-helm",
+            repo: repo,
         },
     }, {
         provider: eksProvider,
     });
 }
-

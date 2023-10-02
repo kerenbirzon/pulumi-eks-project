@@ -1,20 +1,18 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as awsx from "@pulumi/awsx";
-import { SubnetsConfig } from "..";
 
 let awsConfig = new pulumi.Config("aws");
-let awsRegion = awsConfig.require("region");
 
-export function createVPC(vpcname: string, vpcazcount: number, subnets: SubnetsConfig[] ) {
-  const subnetSpecs = subnets.map(subnetConfig => ({
-    type: subnetConfig.type,
-    cidrMask: subnetConfig.cidrmask,
-    name: subnetConfig.name,
-  }));
+export function createVPC(
+  vpcname: string, 
+  vpcazcount: number, 
+  subnets: awsx.types.input.ec2.SubnetSpecArgs[] ) {
   
+  console.log("subnetSpecs:", subnets);
+
   const vpc = new awsx.ec2.Vpc(vpcname, {
     numberOfAvailabilityZones: vpcazcount,
-    //subnetSpecs: subnetSpecs,
+    //subnetSpecs: subnets,
     subnetSpecs:[
         {
           type: awsx.ec2.SubnetType.Public,
