@@ -2,7 +2,7 @@ import * as pulumi from "@pulumi/pulumi";
 import * as eks from "@pulumi/eks";
 import * as kubernetes from "@pulumi/kubernetes";
 
-// Create an EKS cluster 
+// Create an EKS cluster function
 export function createEKSCluster(
     clusterName: string,
     vpcId: pulumi.Output<string>, 
@@ -40,15 +40,15 @@ export function createNameSpace(namespace: string, eksProvider: pulumi.ProviderR
     } 
 }
 
-
-export function createSlackTokenSecret(slacktoken: string) {
-    const slackTokenSecret = new kubernetes.core.v1.Secret("slacktoken", {
+// Create kubernetes secret function
+export function createSecret(secretName: string, secretNamespace: string, secretValue: string) {
+    const secret = new kubernetes.core.v1.Secret(secretName, {
         metadata: {
-            name: "slack-token",
-            namespace: "monitoring"
+            name: secretName,
+            namespace: secretNamespace
           },
         data: {
-            "slack-token": slacktoken,
+            secretName: secretValue,
           },
     });
 }
