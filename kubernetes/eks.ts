@@ -48,7 +48,7 @@ export function createSecret(secretName: string, secretNamespace: string, secret
             namespace: secretNamespace
           },
         data: {
-            secretName: secretValue,
+            [secretName]: secretValue
           },
     });
 }

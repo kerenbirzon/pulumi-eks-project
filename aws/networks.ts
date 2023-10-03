@@ -1,27 +1,25 @@
 import * as awsx from "@pulumi/awsx";
+import { parse } from "path";
 
 export function createVPC(
   vpcname: string, 
   vpcazcount: number, 
   subnets: awsx.types.input.ec2.SubnetSpecArgs[] ) {
-  
-  console.log("subnetSpecs:", subnets);
 
   const vpc = new awsx.ec2.Vpc(vpcname, {
     numberOfAvailabilityZones: vpcazcount,
-    //subnetSpecs: subnets,
     subnetSpecs:[
-        {
-          type: awsx.ec2.SubnetType.Public,
-          cidrMask: 20,
-          name: "project_public_subnet",
-        },
-        {
-          type: awsx.ec2.SubnetType.Private,
-          cidrMask: 20,
-          name: "project_private_subnet",
-        },
-    ],
+      {
+        type: awsx.ec2.SubnetType.Public,
+        cidrMask: subnets[0].cidrMask,
+        name: subnets[0].name,
+      },
+      {
+        type: awsx.ec2.SubnetType.Private,
+        cidrMask: subnets[1].cidrMask,
+        name: subnets[1].name,
+      },
+  ],
   });
   return {
     vpcId: vpc.vpcId,

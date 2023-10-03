@@ -8,7 +8,7 @@ import { installArgoCD } from "./kubernetes/argocd"
 let vpcConfig = new pulumi.Config("aws-vpc");
 let vpcname = vpcConfig.require("vpc-name");
 let vpcazcount = vpcConfig.require("vpc-az-count");
-let subnets = vpcConfig.requireObject<any[]>("vpc-subnets");
+let subnets = vpcConfig.requireObject<awsx.types.input.ec2.SubnetSpecArgs[]>("vpc-subnets");
 
 // Create VPC
 const vpc = createVPC(vpcname, parseInt(vpcazcount), subnets);
@@ -49,6 +49,6 @@ installArgoCD(argocdNamespace, argocdChart, argocdRepo, eksProvider);
 // Create kubernetes secret for event exporter
 let config = new pulumi.Config();
 let slacktoken = config.requireSecret("slack-token")
-slacktoken.apply(secretValue => {
-    const slackTokenSecret = createSecret("slack-token","monitoring", secretValue);
+slacktoken.apply(secret => {
+    const slackTokenSecret = createSecret("slack-token","monitoring", secret);
 });

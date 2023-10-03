@@ -7,12 +7,12 @@ config:
   aws-vpc:vpc-az-count: "2"
   aws-vpc:vpc-name: project_vpc
   aws-vpc:vpc-subnets:
-    - cidrmask: 20
-      name: project_public_subnet
-      type: awsx.ec2.SubnetType.Public
-    - cidrmask: 20
-      name: project_private_subnet
-      type: awsx.ec2.SubnetType.Private
+    - type: awsx.ec2.SubnetType.Public
+      cidrMask: 20
+      name: "project_public_subnet"   
+    - type: awsx.ec2.SubnetType.Private
+      cidrMask: 20
+      name: "project_private_subnet"
   aws:region: us-east-1
   eks-cluster:clusterName: eks-cluster
   eks-cluster:desiredCapacity: "2"
