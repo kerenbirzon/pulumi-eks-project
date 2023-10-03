@@ -30,7 +30,6 @@ export function kubernetesSetup()
     const kubeconfig = eksClusterConfig.kubeconfig;
     const eksProvider = eksClusterConfig.eksProvider;
 
-
     // ArgoCD Configuration
     let argocdConfig = new pulumi.Config("argo-cd");
     let argocdNamespace = argocdConfig.require("namespace");
@@ -44,9 +43,11 @@ export function kubernetesSetup()
     // Create kubernetes secret for event exporter
     let config = new pulumi.Config();
     let slacktoken = config.requireSecret("slack-token")
+    createNameSpace("monitoring", eksProvider);
     slacktoken.apply(secret => {
         const slackTokenSecret = createSecret("slack-token","monitoring", secret);
     });
 
+    return kubeconfig;
 };
 

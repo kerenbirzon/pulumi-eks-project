@@ -1,5 +1,6 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as kubernetes from "@pulumi/kubernetes";
+const stack = pulumi.getStack();
 
 export function installHelmChart(
     namespace: string, 
@@ -7,7 +8,8 @@ export function installHelmChart(
     repo: string, 
     eksProvider: pulumi.ProviderResource) {
     
-    const argocd = new kubernetes.helm.v3.Release(`${namespace}-release`, {
+    new kubernetes.helm.v3.Release(`${chart}-${stack}-release`, {
+        name: chart,
         chart: chart,
         namespace: namespace,
         repositoryOpts: {

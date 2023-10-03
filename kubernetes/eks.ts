@@ -2,6 +2,8 @@ import * as pulumi from "@pulumi/pulumi";
 import * as eks from "@pulumi/eks";
 import * as kubernetes from "@pulumi/kubernetes";
 
+const stack = pulumi.getStack();
+
 // Create an EKS cluster function
 export function createEKSCluster(
     clusterName: string,
@@ -14,8 +16,8 @@ export function createEKSCluster(
     maxSize: number,
     ) {
 
-    const cluster = new eks.Cluster(clusterName, {
-        //name: clusterName,
+    const cluster = new eks.Cluster(`${clusterName}-${stack}-eks`, {
+        name: clusterName,
         vpcId: vpcId,
         publicSubnetIds: publicSubnetIds,
         privateSubnetIds: privateSubnetIds,

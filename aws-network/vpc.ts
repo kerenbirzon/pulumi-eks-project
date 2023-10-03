@@ -1,11 +1,13 @@
+import * as pulumi from "@pulumi/pulumi";
 import * as awsx from "@pulumi/awsx";
+const stack = pulumi.getStack();
 
 export function createVPC(
   vpcname: string, 
   vpcazcount: number, 
-  subnets: awsx.types.input.ec2.SubnetSpecArgs[] ) {
+  subnets: any[] ) {
 
-  const vpc = new awsx.ec2.Vpc(vpcname, {
+  const vpc = new awsx.ec2.Vpc(`${vpcname}-${stack}-vpc`, { 
     numberOfAvailabilityZones: vpcazcount,
     subnetSpecs:[
       {
