@@ -1,5 +1,4 @@
 import * as awsx from "@pulumi/awsx";
-import { parse } from "path";
 
 export function createVPC(
   vpcname: string, 

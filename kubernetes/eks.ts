@@ -30,25 +30,3 @@ export function createEKSCluster(
         eksProvider: new kubernetes.Provider("eks-provider", { kubeconfig: cluster.kubeconfigJson }),
     };
 }
-
-export function createNameSpace(namespace: string, eksProvider: pulumi.ProviderResource) {
-    const kubernetesNamespace = new kubernetes.core.v1.Namespace(`${namespace}-namespace`, {
-        metadata: { name: namespace },
-    }, { provider: eksProvider });
-    return {
-        kubernetesNamespace
-    } 
-}
-
-// Create kubernetes secret function
-export function createSecret(secretName: string, secretNamespace: string, secretValue: string) {
-    const secret = new kubernetes.core.v1.Secret(secretName, {
-        metadata: {
-            name: secretName,
-            namespace: secretNamespace
-          },
-        data: {
-            [secretName]: secretValue
-          },
-    });
-}
